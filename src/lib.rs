@@ -1,7 +1,7 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/rtk-rs/.github/master/logos/logo2.jpg")]
-#![doc = include_str!("../README.md")]
+#![doc = core::include_str!("../README.md")]
 #![cfg_attr(docsrs, feature(doc_cfg))]
-
+#![cfg_attr(not(feature = "std"), no_std)]
 #[macro_use]
 mod macros;
 

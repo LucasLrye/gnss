@@ -1,10 +1,10 @@
-//! Geostationary augmentation systems
+//! Geostationary augmentation systems*
+
 #[cfg(feature = "sbas")]
 use crate::prelude::Constellation;
 
 //#[cfg(feature = "serde")]
 //use serde::{Deserialize, Serialize};
-
 #[cfg(feature = "sbas")]
 use geo::{point, Contains, LineString};
 #[cfg(feature = "sbas")]

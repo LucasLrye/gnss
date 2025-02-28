@@ -3,7 +3,7 @@ use std::io::Write;
 use std::path::Path;
 
 use serde::Deserialize;
-
+extern crate alloc;
 fn default_launch_month() -> u8 {
     1 // Jan
 }
@@ -40,6 +40,8 @@ fn build_sbas_helper() {
     let sbas_db: Vec<SBASDBEntry> = serde_json::from_str(&db_content).unwrap();
 
     let content = "use lazy_static::lazy_static;
+extern crate alloc;
+use alloc::vec::Vec;
 
 #[derive(Debug)]
 pub struct SBASHelper<'a> {
@@ -52,7 +54,7 @@ pub struct SBASHelper<'a> {
 }
 
 lazy_static! {
-    static ref SBAS_VEHICLES: Vec<SBASHelper<'static>> = vec![
+    static ref SBAS_VEHICLES: Vec<SBASHelper<'static>> = alloc::vec![
 \n";
 
     fd.write_all(content.as_bytes()).unwrap();

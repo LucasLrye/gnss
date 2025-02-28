@@ -1,9 +1,23 @@
 //! GNSS constellations
-use hifitime::TimeScale;
-use thiserror::Error;
 
+#[cfg(not(feature = "std"))]
+extern crate alloc;
+
+#[cfg(not(feature = "std"))]
+use crate::constellation::alloc::string::ToString;
+#[cfg(not(feature = "std"))]
+use alloc::string::String;
+#[cfg(not(feature = "std"))]
+use core::matches;
+#[cfg(not(feature = "std"))]
+use core::prelude::rust_2024::derive;
+#[cfg(not(feature = "std"))]
+use core::write;
+
+use hifitime::TimeScale;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 /// Constellation parsing & identification related errors
 #[derive(Error, Clone, Debug, PartialEq)]
@@ -63,8 +77,8 @@ pub enum Constellation {
     Mixed,
 }
 
-impl std::fmt::Display for Constellation {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for Constellation {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         match self {
             Self::GPS => write!(f, "GPS"),
             Self::Glonass => write!(f, "Glonass"),
@@ -134,7 +148,7 @@ impl Constellation {
     }
 }
 
-impl std::str::FromStr for Constellation {
+impl core::str::FromStr for Constellation {
     type Err = ParsingError;
     fn from_str(string: &str) -> Result<Self, Self::Err> {
         let s = string.trim().to_lowercase();
@@ -173,11 +187,11 @@ impl std::str::FromStr for Constellation {
     }
 }
 
-impl std::fmt::LowerHex for Constellation {
+impl core::fmt::LowerHex for Constellation {
     /*
      * {:x}: formats Self as single letter standard code
      */
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         match self {
             Self::GPS => write!(f, "G"),
             Self::Glonass => write!(f, "R"),
@@ -191,18 +205,18 @@ impl std::fmt::LowerHex for Constellation {
                 } else if c.is_mixed() {
                     write!(f, "M")
                 } else {
-                    Err(std::fmt::Error)
+                    Err(core::fmt::Error)
                 }
             },
         }
     }
 }
 
-impl std::fmt::UpperHex for Constellation {
+impl core::fmt::UpperHex for Constellation {
     /*
      * {:X} formats Self as 3 letter standard code
      */
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         match self {
             Self::GPS => write!(f, "GPS"),
             Self::Glonass => write!(f, "GLO"),

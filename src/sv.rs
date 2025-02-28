@@ -3,6 +3,13 @@ use crate::constellation::Constellation;
 use hifitime::{Epoch, TimeScale};
 use thiserror::Error;
 
+#[cfg(not(feature = "std"))]
+use core::include;
+#[cfg(not(feature = "std"))]
+use core::prelude::rust_2024::derive;
+#[cfg(not(feature = "std"))]
+use core::write;
+
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -27,7 +34,7 @@ pub enum ParsingError {
     #[error("constellation parsing error")]
     ConstellationParsing(#[from] crate::constellation::ParsingError),
     #[error("sv prn# parsing error")]
-    PRNParsing(#[from] std::num::ParseIntError),
+    PRNParsing(#[from] core::num::ParseIntError),
 }
 
 impl SV {
@@ -37,7 +44,7 @@ impl SV {
     ///
     /// use gnss::sv;
     /// use gnss::prelude::*;
-    /// use std::str::FromStr;
+    /// use core::str::FromStr;
     /// use hifitime::{TimeScale, Epoch};
     ///
     /// let sv = SV::new(Constellation::GPS, 1);
@@ -62,7 +69,7 @@ impl SV {
     /// use hifitime::TimeScale;
     /// use gnss::sv;
     /// use gnss::prelude::*;
-    /// use std::str::FromStr;
+    /// use core::str::FromStr;
     ///
     /// assert_eq!(sv!("G01").timescale(), Some(TimeScale::GPST));
     /// assert_eq!(sv!("E13").timescale(), Some(TimeScale::GST));
@@ -98,7 +105,7 @@ impl SV {
     }
 }
 
-impl std::str::FromStr for SV {
+impl core::str::FromStr for SV {
     type Err = ParsingError;
     /*
      * Parse SV from "XYY" standardized format.
@@ -121,11 +128,11 @@ impl std::str::FromStr for SV {
     }
 }
 
-impl std::fmt::UpperHex for SV {
+impl core::fmt::UpperHex for SV {
     /*
      * Possibly detailed identity for SBAS vehicles
      */
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if self.constellation.is_sbas() {
             if let Some(sbas) = SV::sbas_definitions(self.prn) {
                 write!(f, "{}", sbas.id)
@@ -138,20 +145,20 @@ impl std::fmt::UpperHex for SV {
     }
 }
 
-impl std::fmt::LowerHex for SV {
+impl core::fmt::LowerHex for SV {
     /*
      * Prints self as XYY standard format
      */
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         write!(f, "{:x}{:02}", self.constellation, self.prn)
     }
 }
 
-impl std::fmt::Display for SV {
+impl core::fmt::Display for SV {
     /*
      * Prints self as XYY standard format
      */
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         write!(f, "{:x}{:02}", self.constellation, self.prn)
     }
 }
@@ -159,7 +166,7 @@ impl std::fmt::Display for SV {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::str::FromStr;
+    use core::str::FromStr;
     #[test]
     fn from_str() {
         for (descriptor, expected) in vec![
