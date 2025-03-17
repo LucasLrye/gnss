@@ -42,12 +42,9 @@ serde_json = { version = "1", features = ["preserve_order"] }
 serde = { version = "1", default-features = false, features = ["derive"] }
 
 [dependencies]
+hifitime = {version="4.0", default-features = false}
 thiserror = {version="2", default-features = false}
 lazy_static = {version="1.5", features = ["spin_no_std"]}
 geo = { version = "0.29", optional = true }
 wkt = { version = "0.10", default-features = false, optional = true }
 serde = { version = "1", optional = true, default-features = false, features = ["derive"] }
-[dependencies.hifitime]
-git = "ssh://git@github.com/LucasLrye/hifitime.git"
-branch = "no-std-correction"
-default-features = false
